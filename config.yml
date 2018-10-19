@@ -1,0 +1,24 @@
+# Liste des serveurs accessibles via le composant terminal
+servers:
+  # mademo:
+    # method: ssh
+    # user: root
+    # ip: 10.0.4.4
+    # port: 22
+    # privateKey: {{env.HOME}}/.ssh/id_rsa
+    # password: {{env.PASSWORD}}
+  localhost:
+    method: tty
+
+log_level: info
+port: 3000
+ip: 127.0.0.1
+
+# Surcharge les statics et les views
+#content:
+#  static: ./custom_static/
+#  slides: ./custom_views/
+
+vars:
+  title: Demonstration
+  theme: league

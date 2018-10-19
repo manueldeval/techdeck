@@ -1,0 +1,11 @@
+section
+
+  h1 Terminal
+
+  .cols
+    .col
+      terminal(name="monnom" id="localhost" :autostart="true" command="ls -al")
+
+    .col
+      p Execution d'une commande
+      code(style="font-size:15px"  class="cmd" v-send-cmd:monnom) echo "Hello world"

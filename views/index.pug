@@ -1,0 +1,76 @@
+doctype html
+html
+  head
+    title #{vars.title}
+    //- REVEAL STUFF
+    link(rel="stylesheet" href="/static/reveal/css/reveal.css")
+    link(rel="stylesheet" href="/static/reveal/css/theme/"+vars.theme+".css")
+    script(src="/static/reveal/js/reveal.js")
+    script(src="/static/reveal/lib/js/head.min.js")
+    
+    //- FONT AWESOME
+    link(rel="stylesheet" href="/font-awesome/css/font-awesome.min.css")
+    
+    //- VUEJS
+    script(src="/vue/dist/vue.js")
+
+    //- FOR TERMINAL AND BROWSER
+    link(rel="stylesheet" href="/xterm/dist/xterm.css")
+    link(rel="stylesheet" href="/static/shell.css")
+    script(src="/xterm/dist/xterm.js")
+    script(src="/xterm/dist/addons/fit/fit.js")
+    script(src="/socket.io-client/dist/socket.io.js")
+    script(src="/static/terminal.js")
+    script(src="/static/browser.js")
+
+    //- MAIN CSS
+    link(rel="stylesheet" href="/static/main.css")
+
+  body
+    .reveal#app
+      .slides
+        include /slides.pug
+
+    script.
+      const EventBus = new Vue();
+      
+      Vue.directive('sendUrl', {
+        bind: function (el,binding,vnode) {
+          el.addEventListener("click", function(){
+            var browser = binding.arg;
+            var url = el.innerHTML;
+            console.log("About to send ",url," on ",browser)
+            EventBus.$emit('browser:'+browser, url);
+          });
+        }
+      })
+
+      Vue.directive('sendCmd', {
+        bind: function (el,binding,vnode) {
+          el.addEventListener("click", function(){
+            var term = binding.arg;
+            var command = el.innerHTML;
+            console.log("About to send ",command," on ",term)
+            EventBus.$emit('term:'+term, command);
+          });
+        }
+      })
+
+      vueApp = new Vue({
+        el: '#app',
+        mounted: function(){
+          Reveal.initialize({	
+            width: 1400,
+            height: 700,
+            margin: 0.1,
+            minScale: 0.2,
+            maxScale: 1.5,
+            fragmentInURL: true,
+            history: true
+          });
+        }
+      })
+
+
+
+
