@@ -47,7 +47,13 @@ const initPug = function(app,customSlides) {
   ]
   app.set('view engine', 'pug');
   app.set('views',customSlides?[customSlides,__dirname + '/../views']:[__dirname + '/../views']);
-  app.get('/',  (req, res) => res.render('index.pug',{ vars: config.vars }));
+  app.get('/',  (req, res) => { 
+    res.render('index.pug',{ vars: config.vars, params: req.query })
+  });
+  app.get('/code',  (req, res) => {
+    console.log("params",req.query)
+    res.render('code_iframe.pug',{ vars: config.vars, params: req.query })
+  });
 }
 
 module.exports = initPug;

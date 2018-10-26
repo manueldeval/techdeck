@@ -23,7 +23,9 @@ app.use('/static/', express.static(__dirname+'/static'));
   'vue',
   'xterm',
   'socket.io-client',
-  'font-awesome'
+  'font-awesome',
+  'codemirror',
+  'vue-codemirror'
 ].forEach(e => app.use("/"+e, express.static(__dirname+'/node_modules/'+e+"/")) )
 
 // Template engine

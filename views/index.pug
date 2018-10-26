@@ -25,7 +25,9 @@ html
     //- MAIN CSS
     link(rel="stylesheet" href="/static/main.css")
 
-
+    //- Code mirror
+    script(src="/static/codemirror.js")
+    
   body
     .reveal#app
       .slides
@@ -33,7 +35,7 @@ html
 
     script.
       const EventBus = new Vue();
-      
+
       Vue.directive('sendUrl', {
         bind: function (el,binding,vnode) {
           el.addEventListener("click", function(){
@@ -58,6 +60,8 @@ html
 
       vueApp = new Vue({
         el: '#app',
+        data: {
+        },
         mounted: function(){
           Reveal.initialize({	
             width: 1400,
@@ -75,6 +79,6 @@ html
         }
       })
 
-
+  
 
 
