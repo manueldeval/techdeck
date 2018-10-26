@@ -15,16 +15,16 @@ html
     script(src="/vue/dist/vue.js")
 
     //- FOR TERMINAL AND BROWSER
-    link(rel="stylesheet" href="/xterm/dist/xterm.css")
     link(rel="stylesheet" href="/static/shell.css")
     script(src="/xterm/dist/xterm.js")
+    link(rel="stylesheet" href="/xterm/dist/xterm.css")
     script(src="/xterm/dist/addons/fit/fit.js")
     script(src="/socket.io-client/dist/socket.io.js")
     script(src="/static/terminal.js")
     script(src="/static/browser.js")
-
     //- MAIN CSS
     link(rel="stylesheet" href="/static/main.css")
+
 
   body
     .reveal#app
@@ -66,7 +66,11 @@ html
             minScale: 0.2,
             maxScale: 1.5,
             fragmentInURL: true,
-            history: true
+            history: true,
+            // Sub optimal, but if we set the default value (3) 
+            // the terminal is not correctly rendered if
+            // the slide is >3
+            viewDistance: 9999
           });
         }
       })

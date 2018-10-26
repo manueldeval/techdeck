@@ -15,9 +15,9 @@ port: 3000
 ip: 127.0.0.1
 
 # Surcharge les statics et les views
-#content:
+content:
 #  static: ./custom_static/
-#  slides: ./custom_views/
+  slides: ./views/
 
 vars:
   title: Demonstration
