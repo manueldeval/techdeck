@@ -1,5 +1,28 @@
 section
   h1 Code mirror
-  codemirror(:width=600)
-    | code: coucou
-    | pouet: toto
+  codemirror( :width=800 
+              :height=300 
+              mode="yaml" 
+              theme="ambiance" 
+              :font-size=16)
+    textarea
+      | apiVersion: v1
+      | kind: Pod
+      | metadata:
+      |   name: nginx-dummy
+      |   namespace: default
+      | spec:
+      |   containers:
+      |   - name: nginx-dummy
+      |     image: nginx
+      |     volumeMounts:
+      |     - name: dummy
+      |       mountPath: /data
+      |     ports:
+      |     - containerPort: 80
+      |   volumes:
+      |   - name: dummy
+      |     flexVolume:
+      |       driver: "lab/lochost"
+      |       options:
+      |         volumeID: "nginx-volume"
