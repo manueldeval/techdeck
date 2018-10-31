@@ -28,7 +28,12 @@ sshMethod = function(socket,serverConfig){
       } 
 
       socket.on('data', function(data) {
-        stream.write(data);
+        if (data.t == 'key'){
+          stream.write(data.v);
+        } else {
+          stream.setWindow(data.v.rows,data.v.cols)
+          logger.info(JSON.stringify(data.v));
+        }
       });
 
       stream.on('data', function(d) {

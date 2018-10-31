@@ -4,10 +4,11 @@ section
 
   .cols
     .col
-      browser(name="mybrowser" url="http://www.linuxfr.org")
+      browser(id="mybrowser" url="http://www.linuxfr.org" width="100%")
     .col
       p Changement d'url
-      code(style="font-size:15px" class="cmd"  v-send-url:mybrowser) https://linuxfr.org/wiki/linuxfr-org 
-
+      code(style="font-size:15px" class="cmd"  v-send-to-bus:mybrowser.changeurl="'https://linuxfr.org/'") Home 
+      br
+      code(style="font-size:15px"  class="cmd" v-send-to-bus:mybrowser.changeurl) https://linuxfr.org/wiki/linuxfr-org 
 
 

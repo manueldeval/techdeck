@@ -16,7 +16,13 @@ ttyMethod = function(socket,serverConfig){
   
   // handle incoming data (client -> server)
   socket.on('data', function(data) {
-    term.write(data);
+    if (data.t == 'key'){
+      term.write(data.v);
+    } else {
+      //term.write('\\033[8;'+data.v.rows+';'+data.v.cols+'t')
+      term.resize(data.v.cols,data.v.rows);
+      //term.info(JSON.stringify(data.v));
+    }
   });
 
   // handle connection lost
@@ -27,7 +33,9 @@ ttyMethod = function(socket,serverConfig){
 
   // send buffer data to client
 	term.on('data', function(data) {
-		return socket.emit('data', data);
+    if (socket){
+      return socket.emit('data', data);
+    }
 	});
 
 }

@@ -1,0 +1,124 @@
+doctype html
+html(style="height:100%")
+  head
+    //- FOR TERMINAL AND BROWSER
+    script(src="/xterm/dist/xterm.js")
+    link(rel="stylesheet" href="/xterm/dist/xterm.css")
+    script(src="/xterm/dist/addons/fit/fit.js")
+    script(src="/socket.io-client/dist/socket.io.js")
+
+    script(src="/vue/dist/vue.js")
+    script(src="/static/bus.js")
+
+    style.
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+  body(style="height:100%")
+    div(id="terminal" style="width:100%;height:100%")
+
+    script.
+
+      const DISCONNECTED = 0;
+      const CONNECTING = 1;
+      const CONNECTED = 2;
+      const address = "#{params.busAddress}";
+
+      var term = null;
+      var socket = null;
+      var state = DISCONNECTED;
+
+
+      var hostId = "#{params.hostId}";
+      var startupCommand = "#{params.startupCommand}";
+      var autoStart = ("#{params.autoStart}" == "true");
+
+      var setState = function(newState){
+        state = newState;
+        BUS.publish(address,"status",state)
+      }
+
+      var disconnect = function(){
+        if (socket){
+          socket.disconnect()
+        }
+        setState(DISCONNECTED);
+      }
+
+      var create = function(){
+        setState(DISCONNECTED);
+
+        Terminal.applyAddon(fit);
+        term = new Terminal({ 
+          fontSize: #{params.fontSize},
+          cursorBlink: true, 
+          fontFamily: 'Ubuntu Mono, courier-new, courier, monospace',
+          /*lineHeight:0,
+          fontSize: 16,
+          cursorStyle: 'underline',
+          rendererType: 'dom'*/
+        });
+
+        var terminalContainer = document.getElementById('terminal');
+        term.open(terminalContainer);
+        term.fit();
+
+        if (autoStart){
+          connect();
+        }
+      }
+
+
+      var connect = function(){
+        disconnect();
+        setState(CONNECTING);
+        
+        socket = socket = io.connect({ query: { id: hostId } })
+        socket.on('connect', function() {
+          setState(CONNECTED);
+          // TERM => NODE
+          term.on('resize', function(evt) {
+            var message = {t: "resize", v: {cols: evt.cols, rows: evt.rows} };
+            socket.emit('data', message); 
+          });
+
+          term.on('data', function(data) { 
+            var message = {t: "key", v: data };
+            socket.emit('data', message); 
+          });
+
+          window.onresize = function(){
+            term.fit();
+            var message = {t: "resize", v: {cols: term.cols, rows: term.rows} };
+            socket.emit('data', message);
+          }
+
+          // BUS => NODE
+          BUS.subscribe(address,"command",function(command){
+            var message = {t: "key", v: command };
+            socket.emit('data', message);  
+          });
+
+          // NODE => TERM
+          var first = true;
+          socket.on('data', function(data) { 
+            term.write(data);
+            if (first){
+              var message = {t: "resize", v: {cols: term.cols, rows: term.rows} };
+              socket.emit('data', message); 
+              if (startupCommand){
+                socket.emit('data',{t: "key", v: startupCommand });
+              }
+              first = false;
+            }
+          });
+          socket.on('disconnect', function() {
+            console.log("IO Disconnected! ")
+          });
+        });
+      }
+      create();
+
+

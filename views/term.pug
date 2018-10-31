@@ -1,11 +1,17 @@
 section
-
   h1 Terminal
-
   .cols
     .col
-      terminal(name="monnom" id="localhost" :autostart="true" command="ls -al")
-
-    .col
-      p Execution d'une commande
-      code(style="font-size:15px"  class="cmd" v-send-cmd:monnom) echo "Hello world"
+      term( id="term1" 
+            host-id="localhost"
+            autostart=true 
+            :font-size=18
+            width='100%'
+            height='400px'
+            command="clear\\n")
+    .col  
+      ul
+        li
+          code(style="font-size:15px"  class="cmd" v-send-to-bus:term1.command) ls -al
+        li
+          code(style="font-size:15px"  class="cmd" v-send-to-bus:term1.command="'ls -al\\n'") push me

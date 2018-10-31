@@ -53,6 +53,9 @@ const initPug = function(app,customSlides) {
   app.get('/code',  (req, res) => {
     res.render('code_iframe.pug',{ vars: config.vars, params: req.query })
   });
+  app.get('/term',  (req, res) => {
+    res.render('term_iframe.pug',{ vars: config.vars, params: req.query })
+  });
 }
 
 module.exports = initPug;

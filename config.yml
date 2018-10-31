@@ -1,11 +1,11 @@
 # Liste des serveurs accessibles via le composant terminal
 servers:
-  # mademo:
-    # method: ssh
-    # user: root
-    # ip: 10.0.4.4
-    # port: 22
-    # privateKey: {{env.HOME}}/.ssh/id_rsa
+  mademo:
+    method: ssh
+    user: root
+    ip: 10.0.4.4
+    port: 22
+    privateKey: {{env.HOME}}/.ssh/id_rsa
     # password: {{env.PASSWORD}}
   localhost:
     method: tty

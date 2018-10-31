@@ -2,6 +2,7 @@ doctype html
 html
   head
     title #{vars.title}
+
     //- REVEAL STUFF
     link(rel="stylesheet" href="/static/reveal/css/reveal.css")
     link(rel="stylesheet" href="/static/reveal/css/theme/"+vars.theme+".css")
@@ -10,53 +11,41 @@ html
     
     //- FONT AWESOME
     link(rel="stylesheet" href="/font-awesome/css/font-awesome.min.css")
-    
+        
     //- VUEJS
     script(src="/vue/dist/vue.js")
 
-    //- FOR TERMINAL AND BROWSER
-    link(rel="stylesheet" href="/static/shell.css")
-    script(src="/xterm/dist/xterm.js")
-    link(rel="stylesheet" href="/xterm/dist/xterm.css")
-    script(src="/xterm/dist/addons/fit/fit.js")
-    script(src="/socket.io-client/dist/socket.io.js")
-    script(src="/static/terminal.js")
+    //- VUE COMPONENTS 
+    script(src="/static/uuid.js")
+    script(src="/static/bus.js")
+    script(src="/static/term.js")
+    script(src="/static/codemirror.js")
     script(src="/static/browser.js")
+
     //- MAIN CSS
     link(rel="stylesheet" href="/static/main.css")
 
-    //- Code mirror
-    script(src="/static/codemirror.js")
-    
   body
     .reveal#app
       .slides
         include /slides.pug
 
     script.
-      const EventBus = new Vue();
 
-      Vue.directive('sendUrl', {
+
+      Vue.directive('sendToBus', {
         bind: function (el,binding,vnode) {
           el.addEventListener("click", function(){
-            var browser = binding.arg;
-            var url = el.innerHTML;
-            console.log("About to send ",url," on ",browser)
-            EventBus.$emit('browser:'+browser, url);
+            var target = binding.arg;
+            var value = binding.value  || el.innerHTML;
+            var modifiers = binding.modifiers;
+            var command = Object.keys(modifiers)[0];
+            console.log(target,command, value)
+            BUS.publish(target,command, value);
           });
         }
       })
 
-      Vue.directive('sendCmd', {
-        bind: function (el,binding,vnode) {
-          el.addEventListener("click", function(){
-            var term = binding.arg;
-            var command = el.innerHTML;
-            console.log("About to send ",command," on ",term)
-            EventBus.$emit('term:'+term, command);
-          });
-        }
-      })
 
       vueApp = new Vue({
         el: '#app',
@@ -64,11 +53,11 @@ html
         },
         mounted: function(){
           Reveal.initialize({	
-            width: 1400,
-            height: 700,
-            margin: 0.1,
-            minScale: 0.2,
-            maxScale: 1.5,
+            width: "100%",
+            height: "100%",
+            margin: 0.05,
+            minScale: 1,
+            maxScale: 1,
             fragmentInURL: true,
             history: true,
             // Sub optimal, but if we set the default value (3) 

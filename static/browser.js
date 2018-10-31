@@ -2,10 +2,10 @@
 
 Vue.component('browser', {
   props: {
-    name: String,
+    id: { type: String, default: uuid() },
     url: { type: String, default: "https://default/" },
-    width: { type: Number, default: 650 },
-    height: { type: Number, default: 400 }
+    width: { type: String, default: '650px'} ,
+    height: { type: String, default: '400px' }
   },
   data: function () {
     return {
@@ -26,30 +26,18 @@ Vue.component('browser', {
   mounted: function(){
     var self = this;
     this.actualUrl = this.url
-    EventBus.$on('browser:'+this.name, function(url){
+    BUS.subscribe(this.id,'changeurl', function(url){
       self.actualUrl = url
       self.$refs.iframe.src = url
     });
   },
   template: `
-    <div class="shell-wrap" :style="{width:width+'px',height:(height+20)+'px'}">
-      <div class="shell-top-bar" style="text-align: center;">
-      <div class="shell-top-title">Url:&nbsp</div>
-        <input type="text" @change="urlChange" v-model="actualUrl" class="shell-url-input" :style="{width:(width-80)+'px'}"></input>
-        <div class="shell-top-icon" v-on:click="home">
-          <i class="fa fa-home" style="fontSize:12px"></i>
-        </div>
-      </div>
-      <div style="width:100%;height:100%;position: relative;overflow: hidden;">
-        <iframe 
-          onload="console.log('Done func');" onerror="console.log('failed function');"
-          ref="iframe"
-          :style="{width:'100%',height:(height-5)+'px'}"
-          frameborder="0"
-          title="La page Wikipédia consacrée à Robert Louis Stevenson" 
-          :src="url">
+    <div :style="{width:width,height:height,position: 'relative' }"> 
+        <iframe ref="iframe" 
+          :src="url" 
+          style="max-height:100%; max-width: 100%;width:100%;height:100%" 
+          frameborder="0" 
+          scrolling="yes">
         </iframe>
-      </div>
-
     </div>`
 })

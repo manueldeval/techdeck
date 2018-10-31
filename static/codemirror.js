@@ -2,9 +2,9 @@
 
 Vue.component('codemirror', {
   props: {
-    name: String,
-    width: { type: Number, default: 800 },
-    height: { type: Number, default: 600 },
+    id: { type: String, default: uuid() },
+    width: { type: String, default: '800px' },
+    height: { type: String, default: '600px' },
     fontSize: { type: Number, default: 16 },
     mode: { type: String, default: "yaml" },
     theme: { type: String, default: "paraiso-light" },
@@ -15,8 +15,9 @@ Vue.component('codemirror', {
   },
   computed: {
     url: function(){
-      console.log("theme: "+this.theme)
-      return '/code?width='+this.width+'&height='+this.height+'&mode='+this.mode+"&theme="+this.theme+"&fontSize="+this.fontSize;
+      var newUrl = '/code?mode='+this.mode+"&theme="+this.theme+"&fontSize="+this.fontSize;
+      console.log("newUrl: "+newUrl)
+      return newUrl;
     }
   },
   methods: {
@@ -36,9 +37,14 @@ Vue.component('codemirror', {
     }
   },
   template: `
-  <div>
-  <iframe ref="iframe" :src="url" :style="{width:width+'px',height:height+'px'}" frameborder="0">
+  <div :style="{width:width,height:height,position: 'relative' }"> 
+  <iframe ref="iframe" 
+    :src="url" 
+    style="max-height:100%; max-width: 100%;width:100%;height:100%" 
+    frameborder="0" 
+    scrolling="no">
   </iframe>
-  </div>
-  `
+</div>`
+
 })
+
