@@ -8,6 +8,8 @@ Vue.component('codemirror', {
     fontSize: { type: Number, default: 16 },
     mode: { type: String, default: "yaml" },
     theme: { type: String, default: "paraiso-light" },
+    label:  String,
+    header: {type: Boolean, default: true },
   },
   data: function () {
     return {
@@ -38,13 +40,16 @@ Vue.component('codemirror', {
   },
   template: `
   <div :style="{width:width,height:height,position: 'relative' }"> 
-  <iframe ref="iframe" 
-    :src="url" 
-    style="max-height:100%; max-width: 100%;width:100%;height:100%" 
-    frameborder="0" 
-    scrolling="no">
-  </iframe>
-</div>`
+    <div :style="{width:width,backgroundColor:'#2b2727',fontSize:fontSize+'px'}">
+      {{ label || mode }}
+    </div>
+    <iframe ref="iframe" 
+      :src="url" 
+      style="max-height:100%; max-width: 100%;width:100%;height:100%" 
+      frameborder="0" 
+      scrolling="no">
+    </iframe>
+  </div>`
 
 })
 

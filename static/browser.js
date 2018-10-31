@@ -5,7 +5,10 @@ Vue.component('browser', {
     id: { type: String, default: uuid() },
     url: { type: String, default: "https://default/" },
     width: { type: String, default: '650px'} ,
-    height: { type: String, default: '400px' }
+    height: { type: String, default: '400px' },
+    label: String,
+    header: {type: Boolean, default: true },
+    fontSize: { type: Number, default: 16 }
   },
   data: function () {
     return {
@@ -33,6 +36,12 @@ Vue.component('browser', {
   },
   template: `
     <div :style="{width:width,height:height,position: 'relative' }"> 
+        <div :style="{width:width,backgroundColor:'#2b2727',fontSize:fontSize+'px'}">
+          {{ label || url }}
+          <div v-if="header" @click="home" style="display:block;float:right;padding-right: 3px;cursor:pointer">
+            <i class="fa fa-home"></i>
+          </div>
+        </div>
         <iframe ref="iframe" 
           :src="url" 
           style="max-height:100%; max-width: 100%;width:100%;height:100%" 

@@ -41,8 +41,9 @@ html(style="height:100%")
       }
 
       var disconnect = function(){
+        console.log("DISCONNECTING!")
         if (socket){
-          socket.disconnect()
+          socket.disconnect(true)
         }
         setState(DISCONNECTED);
       }
@@ -55,27 +56,19 @@ html(style="height:100%")
           fontSize: #{params.fontSize},
           cursorBlink: true, 
           fontFamily: 'Ubuntu Mono, courier-new, courier, monospace',
-          /*lineHeight:0,
-          fontSize: 16,
-          cursorStyle: 'underline',
-          rendererType: 'dom'*/
         });
 
         var terminalContainer = document.getElementById('terminal');
         term.open(terminalContainer);
         term.fit();
-
-        if (autoStart){
-          connect();
-        }
       }
 
 
       var connect = function(){
-        disconnect();
+        console.log("CONNECTING!")
         setState(CONNECTING);
         
-        socket = socket = io.connect({ query: { id: hostId } })
+        socket = io.connect({ query: { id: hostId } })
         socket.on('connect', function() {
           setState(CONNECTED);
           // TERM => NODE
@@ -119,6 +112,19 @@ html(style="height:100%")
           });
         });
       }
+
+      BUS.subscribe(address,"connect",function(doConnect){
+        console.log("Do connect: ",doConnect)
+        if (doConnect){
+          connect()
+        } else {
+          disconnect()
+        }
+      });
+
       create();
+      if (autoStart){
+        connect();
+      }
 
 
