@@ -43,7 +43,7 @@ html(style="height:100%")
       var disconnect = function(){
         console.log("DISCONNECTING!")
         if (socket){
-          socket.disconnect(true)
+          socket.disconnect()
         }
         setState(DISCONNECTED);
       }
@@ -55,7 +55,9 @@ html(style="height:100%")
         term = new Terminal({ 
           fontSize: #{params.fontSize},
           cursorBlink: true, 
+          //rendererType: 'dom',
           fontFamily: 'Ubuntu Mono, courier-new, courier, monospace',
+          theme:  { background: '#202020' }
         });
 
         var terminalContainer = document.getElementById('terminal');
@@ -127,4 +129,13 @@ html(style="height:100%")
         connect();
       }
 
+      // Workaround... Chrome perd le focus si
+      // on entre directement dans une autre iframe, 
+      // le term ne recupere alors plus jamais le focus
+      window.onfocus = function(){
+        term.focus()
+      }
+      window.onblur = function(){
+        term.blur()
+      }
 

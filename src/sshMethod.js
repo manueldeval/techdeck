@@ -27,12 +27,15 @@ sshMethod = function(socket,serverConfig){
         return socket.emit('data', '\r\n*** SSH SHELL ERROR: ' + err.message + ' ***\r\n');
       } 
 
-      socket.on('data', function(data) {
+      socket.on('data', function(data,fn) {
         if (data.t == 'key'){
           stream.write(data.v);
         } else {
           stream.setWindow(data.v.rows,data.v.cols)
           logger.info(JSON.stringify(data.v));
+        }
+        if (fn){
+          fn("ok")
         }
       });
 
@@ -45,10 +48,14 @@ sshMethod = function(socket,serverConfig){
     });
   }).on('close', function() {
     socket.emit('data', '\r\n*** SSH CONNECTION CLOSED ***\r\n');
-    socket.disconnect()
+    if (socket){
+      socket.disconnect()
+    }
   }).on('error', function(err) {
     socket.emit('data', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
-    socket.disconnect()
+    if (socket){
+      socket.disconnect()
+    }
   }).connect(sshOptions);
 }
 module.exports = sshMethod;

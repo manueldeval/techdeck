@@ -52,7 +52,7 @@ Vue.component('term', {
     }
   }, 
   template: `
-    <div :style="{width:width,height:height,position: 'relative',backgroundColor:'black' }">
+    <div :style="{width:width,height:height,position: 'relative',backgroundColor:'#202020' }">
       <div :style="{width:width,backgroundColor:'#2b2727',fontSize:fontSize+'px'}">
         {{ label || hostId }}
         <div v-if="header" @click="changeState" style="display:block;float:right;padding-right: 3px;cursor:pointer;">

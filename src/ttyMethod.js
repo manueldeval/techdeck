@@ -19,15 +19,13 @@ ttyMethod = function(socket,serverConfig){
     if (data.t == 'key'){
       term.write(data.v);
     } else {
-      //term.write('\\033[8;'+data.v.rows+';'+data.v.cols+'t')
       term.resize(data.v.cols,data.v.rows);
-      //term.info(JSON.stringify(data.v));
     }
   });
 
   // handle connection lost
   socket.on('disconnect', function() {
-    socket = null;
+    socket = null
     term.kill()
   });
 
@@ -37,6 +35,13 @@ ttyMethod = function(socket,serverConfig){
       return socket.emit('data', data);
     }
 	});
+
+  // send buffer data to client
+	term.on('close', function(data) {
+    if (socket){
+      socket.disconnect()
+    }
+  });
 
 }
 module.exports = ttyMethod;

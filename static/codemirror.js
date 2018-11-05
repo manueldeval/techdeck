@@ -10,9 +10,12 @@ Vue.component('codemirror', {
     theme: { type: String, default: "paraiso-light" },
     label:  String,
     header: {type: Boolean, default: true },
+    hostId: { type: String, default: null },
+    fileName: { type: String, default: null }
   },
   data: function () {
     return {
+      copying: false
     }
   },
   computed: {
@@ -20,9 +23,22 @@ Vue.component('codemirror', {
       var newUrl = '/code?mode='+this.mode+"&theme="+this.theme+"&fontSize="+this.fontSize;
       console.log("newUrl: "+newUrl)
       return newUrl;
+    },
+    canCopyRemote: function(){
+      console.log(this.hostId ,this.fileName,this.hostId && this.fileName)
+      return this.hostId && this.fileName
     }
   },
   methods: {
+    copy: function(){
+      var content = this.$refs.iframe.contentWindow.editor.getValue();
+      this.copying = true
+      var self = this;
+      copyFileToRemote(this.hostId,this.fileName,content,function(){
+        console.log("COPY done.");
+        self.copying = false
+      })
+    }
   },
   mounted: function(){
     if (!(this.$slots.default && 
@@ -40,8 +56,12 @@ Vue.component('codemirror', {
   },
   template: `
   <div :style="{width:width,height:height,position: 'relative' }"> 
-    <div :style="{width:width,backgroundColor:'#2b2727',fontSize:fontSize+'px'}">
+    <div v-if="header"  :style="{width:width,backgroundColor:'#2b2727',fontSize:fontSize+'px'}">
       {{ label || mode }}
+      <div v-if="canCopyRemote" @click="copy" style="display:block;float:right;padding-right: 3px;cursor:pointer;">
+        <i v-if="!copying" class="fa fa-download"></i>
+        <i v-if="copying" class="fa fa-spinner"></i>
+      </div>
     </div>
     <iframe ref="iframe" 
       :src="url" 

@@ -4,8 +4,11 @@ section
     .col
       codemirror( width='100%'
                   height='400px' 
+                  label='flex-volume-demo.yaml'
+                  host-id='localhost'
+                  file-name='~/flex-volume-demo.yaml'
                   mode="yaml" 
-                  theme="ambiance" 
+                  theme="ambiance"
                   :font-size=16)
         textarea
           | apiVersion: v1
@@ -29,4 +32,10 @@ section
           |       options:
           |         volumeID: "nginx-volume"
     .col
-      p Joli code!
+      term( id="termcode" 
+            host-id="localhost"
+            autostart=true 
+            :font-size=16
+            width='100%'
+            height='400px'
+            command="clear\\n")
