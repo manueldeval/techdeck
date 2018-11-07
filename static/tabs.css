@@ -22,6 +22,7 @@ REVEALJS me fait des miseres...
 
 .tabs > ul  li:first-child {
   border-top-left-radius: 3px !important;
+  border-left-width: 0px !important;
 }
 
 .tabs > ul > li:last-child {
