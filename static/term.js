@@ -52,10 +52,10 @@ Vue.component('term', {
     }
   }, 
   template: `
-    <div :style="{width:width,height:height,position: 'relative',backgroundColor:'#202020' }">
-      <div :style="{width:width,backgroundColor:'#2b2727',fontSize:fontSize+'px'}">
+    <div :style="{width:width, height:height, position:'relative', backgroundColor:'#202020'}">
+      <div :style="{width:width, backgroundColor:'#2b2727', fontSize:fontSize+'px'}">
         {{ label || hostId }}
-        <div v-if="header" @click="changeState" style="display:block;float:right;padding-right: 3px;cursor:pointer;">
+        <div v-if="header" @click="changeState" style="display:block;float:right;padding-right: 3px; cursor:pointer;">
           <i  v-if="status == 2" class="fa fa-link"></i>
           <i  v-if="status == 1" class="fa fa-spinner"></i>
           <i  v-if="status == 0" class="fa fa-unlink"></i>
@@ -63,7 +63,7 @@ Vue.component('term', {
       </div>
       <iframe ref="iframe" 
         :src="url" 
-        style="max-height:100%; max-width: 100%;width:100%;height:100%" 
+        style="max-height:100%; max-width: 100%; width:100%; height:100%;min-height:200px; min-width: 200px" 
         frameborder="0" 
         scrolling="no">
       </iframe>

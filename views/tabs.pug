@@ -1,0 +1,24 @@
+section  
+  h1 tabs
+  tabs
+    tab(name="Flex Volume" :selected="true")
+      codemirror( width='100%'
+                  height='400px' 
+                  label='flex-volume-demo.yaml'
+                  mode="javascript" 
+                  theme="ambiance"
+                  :font-size=16)
+        textarea
+          | const hello = function(){ console.log('hello world')} 
+    tab(name="Terminal")
+      term( id="termcodetabs" 
+            host-id="localhost"
+            autostart=true 
+            :font-size=16
+            width='100%'
+            height='400px'
+            command="clear\\n")
+    tab(name="Contenu")
+      p Content 3
+
+

@@ -17,6 +17,7 @@ function executeCommand(hostId,command,callback){
     
     var first = true
     socket.on('data', function() { 
+      // On attend la mire du shell avant d'envoyer la commande
       if (first){
         first = false
         _executeCommand(socket,command,callback)

@@ -22,3 +22,14 @@ content:
 vars:
   title: Demonstration
   theme: league
+
+# Definition des routes pug
+routes:
+  # Core components
+  - template: code_iframe.pug
+    url: /code
+  - template: term_iframe.pug
+    url: /term
+  # Landing page
+  - template: index.pug
+    url: /

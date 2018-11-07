@@ -1,7 +1,7 @@
 const {accessSync, constants: {R_OK}} = require('fs');
 const {dirname, resolve} = require('path');
-const pug = require('pug');
 const config = require('./config');
+var logger = require('./logger');
 
 const exists = filename => {
   try {
@@ -47,15 +47,16 @@ const initPug = function(app,customSlides) {
   ]
   app.set('view engine', 'pug');
   app.set('views',customSlides?[customSlides,__dirname + '/../views']:[__dirname + '/../views']);
-  app.get('/',  (req, res) => { 
-    res.render('index.pug',{ vars: config.vars, params: req.query })
-  });
-  app.get('/code',  (req, res) => {
-    res.render('code_iframe.pug',{ vars: config.vars, params: req.query })
-  });
-  app.get('/term',  (req, res) => {
-    res.render('term_iframe.pug',{ vars: config.vars, params: req.query })
-  });
+
+  // Enregistrement des routes 
+  if (config.routes){
+    config.routes.forEach(route => {
+      logger.info("Registering "+route.url+" => "+route.template)
+      app.get(route.url,  (req, res) => {
+        res.render(route.template,{ vars: config.vars, params: req.query })
+      });
+    });
+  }
 }
 
 module.exports = initPug;
